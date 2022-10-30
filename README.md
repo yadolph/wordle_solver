@@ -17,3 +17,5 @@
     Маска исключений:пок*р
     ['п', 'о', 'к', '*', 'р']
     ['укроп']
+
+![example](https://github.com/yadolph/wordle_solver/blob/main/example.png?raw=true)
