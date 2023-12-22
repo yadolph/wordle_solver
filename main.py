@@ -1,15 +1,18 @@
 import re
+import json
 
 
 def create_word_lst(filename):
-    lines_lst = []
     with open(filename, encoding='UTF-8') as f:
-        lines = f.read()
-        lines_lst = lines.split()
-    return [x for x in lines_lst if len(x) == 5]
+        lst = f.read().split()
+        return [x for x in lst if len(x) == 5]
+    
+def read_rating_dict(filename):
+    with open(filename, encoding='UTF-8') as f:
+        return json.load(f)
 
 
-def game_solver(all_words):
+def game_solver(all_words, rating_dict):
     excl = list(input('Исключения без пробелов:'))
     incl = list(input('Буквы в наличии без пробелов:'))
     corr_mask = list(input('Маска слова с * вместо неизвестных:'))
@@ -55,12 +58,13 @@ def game_solver(all_words):
         words_candidates = [
             x for x in words_candidates if not re.search(symbol, x[position], re.I)
         ]
-
+    words_candidates = sorted(words_candidates, key=lambda word: rating_dict[word], reverse=True)
     return(words_candidates)
 
 
 if __name__ == '__main__':
     all_words = create_word_lst('russian_nouns.txt')
+    rating_dict = read_rating_dict('noun_frequency.json')
     print('Введите слово "ОСИНА"')
     while True:
-        print(game_solver(all_words))
+        print(game_solver(all_words, rating_dict))
